@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import sys, string, random, math, os
+import sys, string, math, os
 
 # the character set used to generate the password
 s = 'abcdefghijklmnopqrstuvwxyz' \
