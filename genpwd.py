@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (C) 2008, 2011, 2012 Philipp Winter (phw@7C0.org)
+# Copyright (C) 2008, 2011, 2012, 2013 Philipp Winter <phw@nymity.ch>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
