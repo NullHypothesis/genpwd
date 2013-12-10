@@ -20,20 +20,20 @@ import sys, string, math, os
 
 # the character set used to generate the password
 s = 'abcdefghijklmnopqrstuvwxyz' \
-	'ABCDEFGHIJKLMNOPQRSTUVWXYZ' \
-	'0123456789~!@#$%^&*()_+{}|' \
-	':"<>?-=[]\\;\',./`'
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZ' \
+    '0123456789~!@#$%^&*()_+{}|' \
+    ':"<>?-=[]\\;\',./`'
 
 chars = 20 # default password length
 if len(sys.argv) == 2:
-	chars = int(sys.argv[1])
+    chars = int(sys.argv[1])
 
 # return a random number <= n
 def rand( n ):
-	c = ord(os.urandom(1))
-	while c > n:
-		c = ord(os.urandom(1))
-	return c
+    c = ord(os.urandom(1))
+    while c > n:
+        c = ord(os.urandom(1))
+    return c
 
 print string.join([s[rand(len(s)-1)] for x in range(chars)], "")
 
