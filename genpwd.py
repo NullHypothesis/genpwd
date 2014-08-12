@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (C) 2008, 2011, 2012, 2013 Philipp Winter <phw@nymity.ch>
+# Copyright (C) 2008, 2011, 2012, 2013, 2014 Philipp Winter <phw@nymity.ch>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,26 +15,42 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
+import math
+import argparse
 
-import sys, string, math, os
+def parse_args():
+    """Parse the given command line arguments."""
 
-# the character set used to generate the password
-s = 'abcdefghijklmnopqrstuvwxyz' \
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZ' \
-    '0123456789~!@#$%^&*()_+{}|' \
-    ':"<>?-=[]\\;\',./`'
+    parser = argparse.ArgumentParser(description="Generate a random password.")
+    parser.add_argument("-l",
+                        "--length",
+                        type=int,
+                        default=30,
+                        help="Password length in ASCII characters.")
 
-chars = 20 # default password length
-if len(sys.argv) == 2:
-    chars = int(sys.argv[1])
+    return parser.parse_args()
 
-# return a random number <= n
-def rand( n ):
-    c = ord(os.urandom(1))
-    while c > n:
-        c = ord(os.urandom(1))
-    return c
+def get_rand_char(alphabet):
+    """Get a random character in the given character alphabet."""
 
-print string.join([s[rand(len(s)-1)] for x in range(chars)], "")
+    char = os.urandom(1)
+    while char not in alphabet:
+        char = os.urandom(1)
 
-print "\nPassword entropy: %d bits" % math.log(len(s) ** chars, 2)
+    return char
+
+def generate(args):
+    """Generate and print a random password."""
+
+    # The alphabet which determines the single characters in our password.  We
+    # use the full printable ASCII range.
+
+    alphabet = "".join([chr(c) for c in range(ord("!"), ord("~") + 1)])
+    password = "".join([get_rand_char(alphabet) for _ in range(args.length)])
+    entropy = math.log(len(alphabet) ** args.length, 2)
+
+    print "%d-bit password:  %s" % (entropy, password)
+
+if __name__ == "__main__":
+    generate(parse_args())
