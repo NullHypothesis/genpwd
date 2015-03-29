@@ -19,40 +19,72 @@ import os
 import math
 import argparse
 
+import alphabets
+
 
 def parse_args():
     """Parse the given command line arguments."""
 
     parser = argparse.ArgumentParser(description="Generate a random password.")
-    parser.add_argument("-l", "--length",
-                        type=int,
-                        default=30,
-                        help="Password length in ASCII characters.")
+    group = parser.add_mutually_exclusive_group(required=False)
+
+    group.add_argument("-l", "--length",
+                       type=int,
+                       help="Password length in ASCII characters or diceware "
+                       "words.")
+
+    group.add_argument("-e", "--entropy",
+                       type=int,
+                       default=90,
+                       help="Desired amount of password entropy.")
+
+    parser.add_argument("-d", "--diceware",
+                        action="store_true",
+                        help="Use diceware instead of ASCII characters. "
+                        "Passphrase will be longer but easier to remember.")
 
     return parser.parse_args()
 
 
-def get_rand_char(alphabet):
-    """Get a random character in the given character alphabet."""
+def rand_int(max_int):
+    """Return a random integer in the range [0, max_int]."""
 
-    char = os.urandom(1)
-    while char not in alphabet:
-        char = os.urandom(1)
+    max_bytes = int(math.ceil(math.log(max_int, 2) / 8))
 
-    return char
+    num = max_int + 1
+    while num > max_int:
+        rand_bytes = os.urandom(max_bytes)
+        num = int(rand_bytes.encode("hex"), 16)
+
+    return num
 
 
 def generate(args):
     """Generate and print a random password."""
 
-    # The alphabet which determines the single characters in our password.  We
-    # use the full printable ASCII range.
+    password = []
 
-    alphabet = "".join([chr(c) for c in range(ord("!"), ord("~") + 1)])
-    password = "".join([get_rand_char(alphabet) for _ in range(args.length)])
-    entropy = math.log(len(alphabet) ** args.length, 2)
+    # Determine which alphabet to use.  We support random ASCII characters and
+    # diceware words that are easier to remember.
 
-    print "%d-bit password:  %s" % (entropy, password)
+    alphabet = alphabets.diceware if args.diceware else alphabets.ascii_chars
+    separator = " " if args.diceware else ""
+
+    # How many elements (i.e., characters or words) do we need?  By default, we
+    # want at least 90 bit-strong passwords.
+
+    if args.length:
+        elements = args.length
+    else:
+        elements = int(math.ceil(args.entropy / math.log(len(alphabet), 2)))
+
+    for _ in xrange(elements):
+        rand_idx = rand_int(len(alphabet) - 1)
+        password.append(alphabet[rand_idx])
+
+    password = separator.join(password)
+    entropy = math.log(len(alphabet) ** elements, 2)
+    print "Password with %.1f bits of entropy:\n%s" % (entropy, password)
 
 
 if __name__ == "__main__":
