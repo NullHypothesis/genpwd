@@ -59,7 +59,7 @@ def rand_int(max_int):
     return num
 
 
-def generate(args):
+def generate(length, entropy, diceware):
     """Generate and print a random password."""
 
     password = []
@@ -67,16 +67,16 @@ def generate(args):
     # Determine which alphabet to use.  We support random ASCII characters and
     # diceware words that are easier to remember.
 
-    alphabet = alphabets.diceware if args.diceware else alphabets.ascii_chars
-    separator = " " if args.diceware else ""
+    alphabet = alphabets.diceware if diceware else alphabets.ascii_chars
+    separator = " " if diceware else ""
 
     # How many elements (i.e., characters or words) do we need?  By default, we
     # want at least 90 bit-strong passwords.
 
-    if args.length:
-        elements = args.length
+    if length:
+        elements = length
     else:
-        elements = int(math.ceil(args.entropy / math.log(len(alphabet), 2)))
+        elements = int(math.ceil(entropy / math.log(len(alphabet), 2)))
 
     for _ in xrange(elements):
         rand_idx = rand_int(len(alphabet) - 1)
@@ -88,4 +88,5 @@ def generate(args):
 
 
 if __name__ == "__main__":
-    generate(parse_args())
+    args = parse_args()
+    generate(args.length, args.entropy, args.diceware)
