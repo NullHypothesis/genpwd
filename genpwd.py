@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (C) 2008, 2011-2015 Philipp Winter <phw@nymity.ch>
+# Copyright (C) 2008, 2011-2016 Philipp Winter <phw@nymity.ch>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -46,6 +46,18 @@ def parse_args():
     return parser.parse_args()
 
 
+def rand_available():
+    """
+    Return True if os.urandom is available, and False otherwise.
+    """
+
+    try:
+        _ = os.urandom(1)
+    except NotImplementedError:
+            return False
+    return True
+
+
 def rand_int(max_int):
     """Return a random integer in the range [0, max_int]."""
 
@@ -61,6 +73,11 @@ def rand_int(max_int):
 
 def generate(length, entropy, diceware):
     """Generate and print a random password."""
+
+    if not rand_available():
+        print >> sys.stderr, ("Error: Unable to generate password because "
+                              "os.urandom is unavailable.")
+        sys.exit(1)
 
     password = []
 
