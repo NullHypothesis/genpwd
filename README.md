@@ -1,23 +1,23 @@
 genpwd
 ======
 
-`genpwd` is a simple and pure-Python password generator.  It generates
-variable-length, secure passwords based on entropy from `os.urandom()`.  It is
-able to generate diceware (longer but easier to remember) as well as classical
-passwords (shorter but harder to remember) consisting of ASCII characters.
+Genpwd is a minimal, pure-Python password generator.  It generates
+variable-length, secure passwords using entropy from `os.urandom()`.  It is able
+to generate diceware (longer but easier to remember) as well as classical
+passwords (shorter but harder to remember).
 
-Running `genpwd`
+Running genpwd
 ----------------
 
-To generate a secure-by-default password, simply run:
+To generate a secure-by-default password, run:
 
     $ ./genpwd.py
 
-To change the password entropy, use the `-e` parameter:
+To change the password's entropy, use the `-e` parameter:
 
     $ ./genpwd.py -e 100
 
-To change the password length, use the `-l` parameter:
+To change the password's length, use the `-l` parameter:
 
     $ ./genpwd.py -l 15
 
