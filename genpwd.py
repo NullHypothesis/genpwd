@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright (C) 2008, 2011-2016 Philipp Winter <phw@nymity.ch>
 #
@@ -18,6 +18,7 @@
 import os
 import math
 import argparse
+import binascii
 
 import alphabets
 
@@ -66,7 +67,7 @@ def rand_int(max_int):
     num = max_int + 1
     while num > max_int:
         rand_bytes = os.urandom(max_bytes)
-        num = int(rand_bytes.encode("hex"), 16)
+        num = int(binascii.hexlify(rand_bytes), 16)
 
     return num
 
@@ -75,8 +76,8 @@ def generate(length, entropy, diceware):
     """Generate and print a random password."""
 
     if not rand_available():
-        print >> sys.stderr, ("Error: Unable to generate password because "
-                              "os.urandom is unavailable.")
+        print("Error: Unable to generate password because os.urandom is "
+              "unavailable.", file=sys.stderr)
         sys.exit(1)
 
     password = []
@@ -95,13 +96,13 @@ def generate(length, entropy, diceware):
     else:
         elements = int(math.ceil(entropy / math.log(len(alphabet), 2)))
 
-    for _ in xrange(elements):
+    for _ in range(elements):
         rand_idx = rand_int(len(alphabet) - 1)
         password.append(alphabet[rand_idx])
 
     password = separator.join(password)
     entropy = math.log(len(alphabet) ** elements, 2)
-    print "Password with %.1f bits of entropy:\n%s" % (entropy, password)
+    print("Password with %.1f bits of entropy:\n%s" % (entropy, password))
 
 
 if __name__ == "__main__":
