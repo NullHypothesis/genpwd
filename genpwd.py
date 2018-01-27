@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (C) 2008, 2011-2016 Philipp Winter <phw@nymity.ch>
+# Copyright (C) 2008, 2011-2018 Philipp Winter <phw@nymity.ch>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ def parse_args():
 
     group.add_argument("-e", "--entropy",
                        type=int,
-                       default=90,
+                       default=120,
                        help="Desired amount of password entropy.")
 
     parser.add_argument("-d", "--diceware",
