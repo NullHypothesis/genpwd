@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (C) 2008, 2011-2018 Philipp Winter <phw@nymity.ch>
+# Copyright (C) 2008-2021 Philipp Winter <phw@nymity.ch>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import sys
 import math
 import argparse
 import binascii
@@ -102,7 +103,8 @@ def generate(length, entropy, diceware):
 
     password = separator.join(password)
     entropy = math.log(len(alphabet) ** elements, 2)
-    print("Password with %.1f bits of entropy:\n%s" % (entropy, password))
+    print("Password with %.1f bits of entropy:" % entropy, file=sys.stderr)
+    print(password)
 
 
 if __name__ == "__main__":
